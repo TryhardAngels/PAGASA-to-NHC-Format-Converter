@@ -30,6 +30,9 @@ Convert Philippine PAGASA typhoon bulletins to National Hurricane Center (NHC) f
 
 ## Usage
 
+### Get the PAGASA Bulletin
+   https://pubfiles.pagasa.dost.gov.ph/tamss/weather/bulletin_uwan.pdf
+   Copy all of the highlighted areas at once (some info will be different) https://imgur.com/a/kj3ij00
 ### Method 1: Double-click (Easiest)
 1. Double-click `pagasa_nhc_converter.py`
 2. A command prompt window will open
