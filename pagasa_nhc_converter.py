@@ -1,0 +1,14 @@
+#!/usr/bin/env python3
+import re
+def convert_pagasa_to_nhc(t):
+    h=' '.join(re.search(r'^(.*?)(?=Location of Center)',t,re.I|re.S).group(1).split())if re.search(r'Location of Center',t,re.I)else'';tm=re.search(r'(\d{1,2}):(\d{2})\s*(AM|PM)',t,re.I)
+    if tm:hr=int(tm.group(1));hr=hr+12 if tm.group(3).upper()=='PM'and hr!=12 else 0 if tm.group(3).upper()=='AM'and hr==12 else hr;tp,tu=f"{hr:02d}{int(tm.group(2)):02d}",f"{(hr-8)%24:02d}{int(tm.group(2)):02d}"
+    else:tp=tu="0000"
+    c=re.search(r'\((\d+\.?\d*)°N,\s*(\d+\.?\d*)°E\)',t);la,lo=(float(c.group(1)),float(c.group(2)))if c else(0,0);wk=int(re.search(r'Maximum sustained winds of (\d+)\s*km/h',t,re.I).group(1))if re.search(r'Maximum sustained winds of (\d+)\s*km/h',t,re.I)else 0;wm=round(int(wk*0.621371)/5)*5;pm=int(re.search(r'central pressure of (\d+)\s*hPa',t,re.I).group(1))if re.search(r'central pressure of (\d+)\s*hPa',t,re.I)else 0;pi=round(pm*0.02953,2);mv=re.search(r'(West northwestward|East northeastward|West southwestward|East southeastward|Northwestward|Northeastward|Southwestward|Southeastward|Westward|Eastward|Northward|Southward)\s+at\s+(\d+)\s*km/h',t,re.I)
+    if mv:dt=mv.group(1).upper().replace('WARD','').strip();sk,sm=int(mv.group(2)),round(int(mv.group(2))*0.621371);dm={'NORTH':(360,'N'),'NORTHEAST':(45,'NE'),'EAST':(90,'E'),'SOUTHEAST':(135,'SE'),'SOUTH':(180,'S'),'SOUTHWEST':(225,'SW'),'WEST':(270,'W'),'NORTHWEST':(315,'NW'),'WEST NORTHWEST':(292.5,'WNW'),'EAST NORTHEAST':(67.5,'ENE'),'EAST SOUTHEAST':(112.5,'ESE'),'WEST SOUTHWEST':(247.5,'WSW')};dd,cp=dm.get(dt,(0,'N'))
+    else:dd,cp,sk,sm=0,'N',0,0
+    lr=[];ls=re.search(r'at\s+\d+\s*km.*?of.*?(?=\([\d.]+°N)',t,re.I|re.S)
+    if ls:
+        for p in re.split(r'\s+or\s+',ls.group(0),flags=re.I):lm=re.search(r'(\d+)\s*km\s+([A-Za-z\s]+?)\s+of\s+([^,\n]+(?:,\s*[A-Za-z\s]+)?)',p,re.I);km,mi,d,lc=(int(lm.group(1)),int(int(lm.group(1))*0.621371),lm.group(2).strip().upper().replace('NORTH','N').replace('SOUTH','S').replace('EAST','E').replace('WEST','W').replace(' ',''),' '.join(lm.group(3).split()))if lm else(0,0,'','');lr.append(f"ABOUT {mi} MI...{km} KM {d} OF {lc.upper()}")if lm else None
+    o=f"...{h}...\n\n\nSUMMARY OF {tp} PHT...{tu} UTC...INFORMATION\n----------------------------------------------\nLOCATION...{la:.1f}N {lo:.1f}E\n";o+='\n'.join(lr)+"\n"if lr else"";o+=f"MAXIMUM SUSTAINED WINDS...{wm} MPH...{wk} KM/H\nPRESENT MOVEMENT...{cp} OR {int(dd)} DEGREES AT {sm} MPH...{sk} KM/H\nMINIMUM CENTRAL PRESSURE...{pm} MB...{pi:.2f} INCHES\n";return o
+if __name__=="__main__":print("Paste PAGASA text:\n");l=[];exec("try:\n while True:\n  line=input();l.append(line)\n  if re.search(r'Present Movement.*?(?:ward|ward\\s+at)\\s+\\d+\\s*km/h','\\n'.join(l),re.I|re.S):break\nexcept EOFError:pass");t='\n'.join(l);print("\nNHC format:\n")if t.strip()else 0;print(convert_pagasa_to_nhc(t))if t.strip()else 0;print("Conversion complete")if t.strip()else 0
