@@ -12,18 +12,43 @@ Convert Philippine PAGASA typhoon bulletins to National Hurricane Center (NHC) f
 - Distance conversion (kilometers to miles)
 - Auto-detects when bulletin is complete
 
+## Requirements
+
+- Python 3.6 or higher
+- No external dependencies (uses only standard library)
+
+## Installation
+
+1. **Download Python** (if not already installed):
+   - Go to [python.org/downloads](https://www.python.org/downloads/)
+   - Download Python for Windows
+   - Run installer and **check "Add Python to PATH"**
+
+2. **Download the script**:
+   - Download `pagasa_nhc_converter.py` from this repository
+   - Save it to a folder (e.g., `C:\Users\YourName\Documents\`)
+
 ## Usage
 
-1. Run the script:
-```bash
-python3 pagasa_nhc_converter.py
-```
+### Method 1: Double-click (Easiest)
+1. Double-click `pagasa_nhc_converter.py`
+2. A command prompt window will open
+3. Paste your PAGASA bulletin text
+4. Press `Enter` after pasting
+5. Press `Ctrl+Z` then `Enter` (or just wait for auto-detection)
 
-2. Paste your PAGASA bulletin text
-
-3. Hit enter
-
-4. The script automatically converts and displays the NHC format
+### Method 2: Command Prompt
+1. Open Command Prompt (Press `Win+R`, type `cmd`, press Enter)
+2. Navigate to the script folder:
+   ```
+   cd C:\Users\YourName\Documents\
+   ```
+3. Run the script:
+   ```
+   python pagasa_nhc_converter.py
+   ```
+4. Paste your PAGASA bulletin
+5. The script will automatically detect when complete and convert
 
 ## Example
 
@@ -58,17 +83,26 @@ MINIMUM CENTRAL PRESSURE...935 MB...27.61 INCHES
 
 ## Conversions
 
-- **Time**: Philippines Time (UTC+8) → UTC
+- **Time**: Philippines Time (UTC+8) → UTC, formatted as military time (e.g., 1300 instead of 1:00 PM)
 - **Wind Speed**: km/h → mph (rounded to nearest 5 mph for sustained winds)
 - **Movement Speed**: km/h → mph (rounded to nearest mph)
 - **Distance**: kilometers → miles
 - **Pressure**: hPa/mb → inches of mercury
 - **Direction**: Full text → Standard abbreviations (N, NE, E, SE, S, SW, W, NW, NNW, etc.)
 
-## Requirements
+## Troubleshooting
 
-- Python 3.6+
-- No external dependencies (uses only standard library)
+**"Python is not recognized"**
+- Python is not installed or not added to PATH
+- Reinstall Python and check "Add Python to PATH" during installation
+
+**Script closes immediately**
+- Run from Command Prompt instead of double-clicking
+- This allows you to see any error messages
+
+**Nothing happens after pasting**
+- Press `Enter` after pasting your bulletin
+- The script auto-detects when the bulletin is complete
 
 ## License
 
